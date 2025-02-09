@@ -3,27 +3,23 @@ use crate::source::source::{DISK_AFFIX_NAMES, DISK_SETS};
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum AffixValueType {
   Flat,
-  Percentage,
+  Percentage
 }
 
 pub struct Affix {
   pub name: &'static str,
   pub value: f64,
-  pub value_type: AffixValueType,
+  pub value_type: AffixValueType
 }
 
 impl Affix {
   pub fn new(name: &str, value: f64, value_type: AffixValueType) -> Result<Self, String> {
     let name: &'static str = match DISK_AFFIX_NAMES.iter().find(|&&str| str == name) {
       Some(str) => str,
-      None => return Err(format!("Invalid affix name: {}", name)),
+      None => return Err(format!("Invalid affix name: {}", name))
     };
 
-    Ok(Self {
-      name,
-      value,
-      value_type,
-    })
+    Ok(Self { name, value, value_type })
   }
 
   pub fn new_simple(name: &str, value: f64) -> Result<Self, String> {
@@ -40,13 +36,14 @@ impl PartialEq for Affix {
   }
 }
 
-impl Eq for Affix {}
+impl Eq for Affix {
+}
 
 pub struct Disk {
   pub set: &'static str,
   pub slot: u8,
   pub primary_affix: Affix,
-  pub secondary_affixes: [Option<Affix>; 4],
+  pub secondary_affixes: [Option<Affix>; 4]
 }
 
 impl Disk {
@@ -57,11 +54,11 @@ impl Disk {
     secondary_affix_1: Option<Affix>,
     secondary_affix_2: Option<Affix>,
     secondary_affix_3: Option<Affix>,
-    secondary_affix_4: Option<Affix>,
+    secondary_affix_4: Option<Affix>
   ) -> Result<Self, String> {
     let set: &'static str = match DISK_SETS.iter().find(|&&str| str == set) {
       Some(str) => str,
-      None => return Err(format!("Invalid disk set: {}", set)),
+      None => return Err(format!("Invalid disk set: {}", set))
     };
 
     Ok(Self {
@@ -72,8 +69,8 @@ impl Disk {
         secondary_affix_1,
         secondary_affix_2,
         secondary_affix_3,
-        secondary_affix_4,
-      ],
+        secondary_affix_4
+      ]
     })
   }
 
@@ -83,7 +80,7 @@ impl Disk {
     primary_affix: Affix,
     secondary_affix_1: Affix,
     secondary_affix_2: Affix,
-    secondary_affix_3: Affix,
+    secondary_affix_3: Affix
   ) -> Result<Self, String> {
     Self::new(
       set,
@@ -92,7 +89,7 @@ impl Disk {
       Some(secondary_affix_1),
       Some(secondary_affix_2),
       Some(secondary_affix_3),
-      None,
+      None
     )
   }
 
@@ -114,4 +111,5 @@ impl PartialEq for Disk {
   }
 }
 
-impl Eq for Disk {}
+impl Eq for Disk {
+}

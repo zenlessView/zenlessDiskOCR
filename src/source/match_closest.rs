@@ -1,5 +1,7 @@
-use crate::source::source::{get_close_words, get_possible_words};
-use levenshtein::levenshtein;
+use {
+  crate::source::source::{get_close_words, get_possible_words},
+  levenshtein::levenshtein
+};
 
 pub async fn select_close_words<'a>(source: &str, words: &Vec<&'a str>) -> &'a str {
   let close_words = get_close_words().await;
@@ -12,7 +14,7 @@ pub async fn select_close_words<'a>(source: &str, words: &Vec<&'a str>) -> &'a s
 pub async fn match_closest_word(word: &str) -> Option<&'static str> {
   let possible_words = match get_possible_words().await.get(word.chars().count() - 1) {
     Some(words) => words,
-    None => return None,
+    None => return None
   };
 
   let mut best_candidate: Option<&str> = None;

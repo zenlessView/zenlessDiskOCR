@@ -1,6 +1,6 @@
-mod source;
 mod disk;
+mod source;
 
 fn main() {
-    println!("Hello, world!");
+  println!("Hello, world!");
 }

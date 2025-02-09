@@ -22,7 +22,7 @@ fn bron_kerbosch(
   p: &mut HashSet<usize>,
   x: &mut HashSet<usize>,
   graph: &Vec<HashSet<usize>>,
-  result: &mut Vec<HashSet<usize>>,
+  result: &mut Vec<HashSet<usize>>
 ) {
   if p.is_empty() && x.is_empty() {
     result.push(r.clone());
@@ -62,7 +62,7 @@ fn get_maximal_cliques(n: usize, edges: &Vec<(usize, usize)>) -> Vec<HashSet<usi
   }
 
   let mut r = HashSet::<usize>::new();
-  let mut p = (0..n).collect::<HashSet<usize>>();
+  let mut p = (0 .. n).collect::<HashSet<usize>>();
   let mut x = HashSet::<usize>::new();
   let mut result = vec![];
 
@@ -73,8 +73,8 @@ fn get_maximal_cliques(n: usize, edges: &Vec<(usize, usize)>) -> Vec<HashSet<usi
 
 pub fn get_close_word_groups(words: &Vec<&'static str>) -> Vec<Vec<&'static str>> {
   let mut edges = vec![];
-  for i in 0..words.len() {
-    for j in i + 1..words.len() {
+  for i in 0 .. words.len() {
+    for j in i + 1 .. words.len() {
       if is_word_close(words[i], words[j]) {
         edges.push((i, j));
       }

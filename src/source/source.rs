@@ -1,6 +1,8 @@
-use crate::source::word_groups;
-use std::collections::{HashMap, HashSet};
-use tokio::sync::OnceCell;
+use {
+  crate::source::word_groups,
+  std::collections::{HashMap, HashSet},
+  tokio::sync::OnceCell
+};
 
 pub static DISK_SETS: &'static [&str; 16] = &[
   "折枝剑歌",
@@ -18,7 +20,7 @@ pub static DISK_SETS: &'static [&str; 16] = &[
   "混沌重金属",
   "雷暴重金属",
   "极地重金属",
-  "獠牙重金属",
+  "獠牙重金属"
 ];
 
 pub static DISK_AFFIX_NAMES: &'static [&str; 16] = &[
@@ -37,7 +39,7 @@ pub static DISK_AFFIX_NAMES: &'static [&str; 16] = &[
   "异常掌控",
   "冲击力",
   "能量自动回复",
-  "穿透值",
+  "穿透值"
 ];
 
 static FIXED_WORDS: &'static [&str; 2] = &["主属性", "副属性"];
@@ -51,64 +53,64 @@ static CLOSE_WORDS: OnceCell<HashMap<&'static str, HashSet<&'static str>>> =
 
 pub async fn get_possible_words() -> &'static Vec<Vec<&'static str>> {
   POSSIBLE_WORDS
-    .get_or_init(|| async {
-      let mut result: Vec<Vec<&'static str>> = vec![vec![]; 8];
+    .get_or_init(|| {
+      async {
+        let mut result: Vec<Vec<&'static str>> = vec![vec![]; 8];
 
-      let possible_words = DISK_SETS
-        .iter()
-        .chain(DISK_AFFIX_NAMES.iter())
-        .chain(FIXED_WORDS.iter());
+        let possible_words =
+          DISK_SETS.iter().chain(DISK_AFFIX_NAMES.iter()).chain(FIXED_WORDS.iter());
 
-      for word in possible_words {
-        let length = word.chars().count();
-        if length <= 8 {
-          result[length - 1].push(word);
+        for word in possible_words {
+          let length = word.chars().count();
+          if length <= 8 {
+            result[length - 1].push(word);
+          }
         }
-      }
 
-      result
+        result
+      }
     })
     .await
 }
 
 pub async fn get_close_word_groups() -> &'static Vec<Vec<&'static str>> {
   CLOSE_WORD_GROUPS
-    .get_or_init(|| async {
-      let mut result = vec![];
+    .get_or_init(|| {
+      async {
+        let mut result = vec![];
 
-      let possible_words = get_possible_words().await;
+        let possible_words = get_possible_words().await;
 
-      for pool in possible_words.iter() {
-        result.extend(word_groups::get_close_word_groups(pool));
+        for pool in possible_words.iter() {
+          result.extend(word_groups::get_close_word_groups(pool));
+        }
+
+        result
       }
-
-      result
     })
     .await
 }
 
-pub async fn get_close_words(
-) -> &'static HashMap<&'static str, HashSet<&'static str>> {
+pub async fn get_close_words() -> &'static HashMap<&'static str, HashSet<&'static str>> {
   CLOSE_WORDS
-    .get_or_init(|| async {
-      let mut result = HashMap::new();
+    .get_or_init(|| {
+      async {
+        let mut result = HashMap::new();
 
-      for word in get_possible_words().await.iter().flatten() {
-        result.insert(*word, HashSet::new());
-      }
-
-      let close_word_groups = get_close_word_groups().await;
-
-      for group in close_word_groups.iter() {
-        for word in group.iter() {
-          result
-            .get_mut(*word)
-            .unwrap()
-            .extend(group.iter().filter(|&w| w != word));
+        for word in get_possible_words().await.iter().flatten() {
+          result.insert(*word, HashSet::new());
         }
-      }
 
-      result
+        let close_word_groups = get_close_word_groups().await;
+
+        for group in close_word_groups.iter() {
+          for word in group.iter() {
+            result.get_mut(*word).unwrap().extend(group.iter().filter(|&w| w != word));
+          }
+        }
+
+        result
+      }
     })
     .await
 }

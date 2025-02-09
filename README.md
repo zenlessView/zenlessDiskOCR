@@ -17,7 +17,7 @@
 
 ---
 
-The project aims at automatically scanning, saving and (possibly) rating affixes for Drive Disks of the game *Zenless Zone Zero*, via OCR techniques.
+The project aims at automatically scanning, saving and (possibly) rating affixes for Drive Disks in the game *Zenless Zone Zero*, via OCR techniques.
 
 This project is at a very early stage in development. Now we are currently working with **Simplified Chinese** language, **Global Light** font scheme, **Mouse And Keyboard** or **Controller** layout, **16:9** resolutions. Support for other languages, fonts, control layouts or screen ratio won't start until the development is near complete and features are stable.
 
