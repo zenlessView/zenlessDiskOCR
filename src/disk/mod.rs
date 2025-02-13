@@ -1,1 +1,1 @@
-mod disk;
+pub mod disk;

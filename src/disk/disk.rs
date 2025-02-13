@@ -1,4 +1,7 @@
-use crate::source::source::{DISK_AFFIX_NAMES, DISK_SETS};
+use {
+  crate::source::source::{DISK_AFFIX_NAMES, DISK_SETS},
+  std::fmt::Display
+};
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub enum AffixValueType {
@@ -6,6 +9,29 @@ pub enum AffixValueType {
   Percentage
 }
 
+impl TryFrom<&str> for AffixValueType {
+  type Error = String;
+
+  fn try_from(value: &str) -> Result<Self, Self::Error> {
+    match value {
+      "flat" => Ok(Self::Flat),
+      "percentage" => Ok(Self::Percentage),
+      _ => Err(format!("Invalid affix value type: {}", value))
+    }
+  }
+}
+
+impl Display for AffixValueType {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let str = match self {
+      Self::Flat => "flat".to_string(),
+      Self::Percentage => "percentage".to_string()
+    };
+    write!(f, "{}", str)
+  }
+}
+
+#[derive(Clone)]
 pub struct Affix {
   pub name: &'static str,
   pub value: f64,
@@ -24,6 +50,16 @@ impl Affix {
 
   pub fn new_simple(name: &str, value: f64) -> Result<Self, String> {
     Self::new(name, value, AffixValueType::Flat)
+  }
+}
+
+impl TryFrom<(&str, f64, &str)> for Affix {
+  type Error = String;
+
+  fn try_from(value: (&str, f64, &str)) -> Result<Self, Self::Error> {
+    let (name, value, value_type) = value;
+    let value_type = AffixValueType::try_from(value_type)?;
+    Self::new(name, value, value_type)
   }
 }
 
@@ -102,6 +138,14 @@ impl Disk {
         && self.secondary_affixes[1] == other.secondary_affixes[1]
         && self.secondary_affixes[2] == other.secondary_affixes[2]
         && self.secondary_affixes[3] == other.secondary_affixes[3])
+  }
+
+  pub fn get_static_set_name(set: &str) -> Option<&'static str> {
+    DISK_SETS.iter().find(|&&str| str == set).map(|&str| str)
+  }
+
+  pub fn get_static_affix_name(name: &str) -> Option<&'static str> {
+    DISK_AFFIX_NAMES.iter().find(|&&str| str == name).map(|&str| str)
   }
 }
 

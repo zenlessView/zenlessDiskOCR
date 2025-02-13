@@ -11,8 +11,9 @@
 - ✘ OCR范围选择和快捷键监听
 - ✘ OCR与预处理
 - ✘ 解析驱动盘数据
-- ✘ 保存数据
-- ✘ 导出数据
+- ✔ 保存数据
+- ✔ 导出数据
+- ✘ 测试
 - ✘ 驱动盘评分
 
 ---
@@ -28,6 +29,7 @@ Progress:
 - ✘ OCR Rectangle Selection
 - ✘ OCR And Preprocessing
 - ✘ Parsing Disk Data
-- ✘ Saving Data
-- ✘ Exporting Data
+- ✔ Saving Data
+- ✔ Exporting Data
+- ✘ Testing
 - ✘ Rating Disks
